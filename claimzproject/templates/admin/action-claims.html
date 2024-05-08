@@ -1,0 +1,32 @@
+{% extends "dashboard/base-dashboard.html" %}
+{% load crispy_forms_tags %}
+{% block title %}
+    {% if action == "approve" %}
+        Approve claim {{ object.invoice_id }}
+    {% elif action == "reject" %}
+        Reject claim {{ object.invoice_id }}
+    {% elif action == "finalize" %}
+        Finalize claim {{ object.invoice_id }}
+    {% endif %}
+{% endblock %}
+{% block content %}
+    <h3 class="pb-3 mb-0">
+        {% if action == "approve" %}
+            Approve claim {{ object.invoice_id }}
+        {% elif action == "reject" %}
+            Reject claim {{ object.invoice_id }}
+        {% elif action == "finalize" %}
+            Finalize claim {{ object.invoice_id }}
+        {% endif %}
+    </h3>
+    <p>
+        {% if action == "approve" %}
+            Are you sure you want to <b>Approve</b> this claim?
+        {% elif action == "reject" %}
+            Are you sure you want to <b>Reject</b> this claim?
+        {% elif action == "finalize" %}
+            Are you sure you want to <b>Finalize</b> this claim?
+        {% endif %}
+    </p>
+    {% crispy form %}
+{% endblock %}

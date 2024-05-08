@@ -1,0 +1,105 @@
+{% extends "dashboard/base-dashboard.html" %}
+{% load crispy_forms_tags %}
+{% block title %}My claims{% endblock %}
+{% block content %}
+    <h3 class="pb-3 mb-0">My claims</h3>
+    <div>
+        <a href="{% url 'create-claims' %}">Create new claim</a>
+    </div>
+    <hr>
+    {% crispy search_form %}
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-hover mb-0 table-custom-responsive"
+               x-init>
+            <thead>
+                <tr>
+                    <th style="width: 1%;">ID</th>
+                    <th>Invoice</th>
+                    <th>Amount (MYR)</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th style="width: 1%;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in page_obj %}
+                    <tr>
+                        <td class="text-right">
+                            <b class="d-inline d-md-none">ID</b>
+                            {{ row.pk }}
+                        </td>
+                        <td>
+                            <b class="d-block d-md-none">Invoice</b>
+                            <div>
+                                {% if row.status == "OPEN" %}
+                                    <a href="{% url 'edit-claims' pk=row.pk %}">{{ row.invoice_id }}</a>
+                                {% else %}
+                                    <a href="{% url 'detail-claims' pk=row.pk %}">{{ row.invoice_id }}</a>
+                                {% endif %}
+                            </div>
+                            <div class="small">{% include 'widgets/date.html' with value=row.invoice_date format='date' %}</div>
+                            <div class="small">Category: {{ row.category.name }}</div>
+                        </td>
+                        <td class="text-right">
+                            <b class="d-inline d-md-none">Amount (MYR)</b>
+                            {% include 'widgets/numeric.html' with value=row.amount %}
+                        </td>
+                        <td>
+                            <b class="d-inline d-md-none">Status</b>
+                            {% include 'widgets/user-status-badge.html' with obj=row %}
+                        </td>
+                        <td>
+                            <b class="d-inline d-md-none">Created</b>
+                            {% include 'widgets/date.html' with value=row.created %}
+                        </td>
+                        <td>
+                            <b class="d-block d-md-none">Actions</b>
+                            <div class="d-flex align-items-start flex-wrap flex-md-nowrap"
+                                 style="gap: 0.25rem">
+                                <a href="{% url 'detail-claims' pk=row.pk %}"
+                                   class="btn btn-outline-secondary"
+                                   data-toggle="tooltip"
+                                   data-title="View">
+                                    <i class="fa fa-fw fa-search"></i>
+                                    <span class="d-md-none">View</span>
+                                </a>
+                                {% if row.status == "OPEN" %}
+                                    <a href="{% url 'edit-claims' pk=row.pk %}"
+                                       class="btn btn-outline-secondary"
+                                       data-toggle="tooltip"
+                                       data-title="Edit">
+                                        <i class="fa fa-fw fa-pencil"></i>
+                                        <span class="d-md-none">Edit</span>
+                                    </a>
+                                    <a href="{% url 'delete-claims' pk=row.pk %}"
+                                       class="btn btn-outline-danger"
+                                       data-toggle="tooltip"
+                                       data-title="Delete">
+                                        <i class="fa fa-fw fa-trash-o"></i>
+                                        <span class="d-md-none">Delete</span>
+                                    </a>
+                                {% endif %}
+                                <a href="{% url 'duplicate-claims' pk=row.pk %}"
+                                   class="btn btn-outline-secondary"
+                                   data-toggle="tooltip"
+                                   data-title="Duplicate">
+                                    <i class="fa fa-fw fa-clone"></i>
+                                    <span class="d-md-none">Duplicate</span>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6">
+                            <div class="text-center py-3">
+                                <p>You have not created any claims.</p>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="pt-3">{% include 'widgets/pagination.html' %}</div>
+{% endblock %}

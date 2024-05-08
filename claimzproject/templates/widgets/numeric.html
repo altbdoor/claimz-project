@@ -1,0 +1,7 @@
+{% if is_integer %}
+    <span x-text="Number('{{ value }}').toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })"
+          class="tabular-nums">{{ value }}</span>
+{% else %}
+    <span x-text="Number('{{ value }}').toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })"
+          class="tabular-nums">{{ value }}</span>
+{% endif %}

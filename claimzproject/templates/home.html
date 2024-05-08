@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="text-center">
+        <div class="py-3">
+            <h1 class="mb-0">Claimz</h1>
+        </div>
+        <p>
+            To begin, <a href="{% url 'login' %}">login</a> into the system.
+        </p>
+        <p>
+            Or, enter the <a href="{% url 'admin:index' %}">Django admin</a> interface.
+        </p>
+    </div>
+{% endblock %}

@@ -1,0 +1,14 @@
+<ol class="mb-0" x-init>
+    {% for log in logs %}
+        <li class="mb-1">
+            <div>
+                {% include 'widgets/admin-action-badge.html' with obj=log %}
+                by {{ log.user.username }}
+            </div>
+            <div class="small">{% include 'widgets/date.html' with value=log.created %}</div>
+            {% if show_remarks and log.remarks %}
+                <div class="border-secondary pl-2 mt-1" style="border-left: 0.25rem solid">{{ log.remarks }}</div>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ol>

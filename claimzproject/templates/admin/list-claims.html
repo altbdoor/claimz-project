@@ -1,0 +1,121 @@
+{% extends "dashboard/base-dashboard.html" %}
+{% load crispy_forms_tags %}
+{% block title %}
+    {% if status == 'open' %}
+        Open claims list
+    {% elif status == 'rejected' %}
+        Rejected claims list
+    {% elif status == 'finalized' %}
+        Finalized claims list
+    {% endif %}
+{% endblock %}
+{% block content %}
+    <h3 class="pb-3 mb-0">
+        {% if status == 'open' %}
+            Open claims list
+        {% elif status == 'rejected' %}
+            Rejected claims list
+        {% elif status == 'finalized' %}
+            Finalized claims list
+        {% endif %}
+    </h3>
+    <div class="pb-3">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link {% if status == 'open' %}active{% endif %}"
+                   href="{% url 'admin-list-claims' status='open' %}">Open</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if status == 'rejected' %}active{% endif %}"
+                   href="{% url 'admin-list-claims' status='rejected' %}">Rejected</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if status == 'finalized' %}active{% endif %}"
+                   href="{% url 'admin-list-claims' status='finalized' %}">Finalized</a>
+            </li>
+        </ul>
+    </div>
+    {% crispy search_form %}
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-hover mb-0 table-custom-responsive"
+               x-init>
+            <thead>
+                <tr>
+                    <th style="width: 1%;">ID</th>
+                    <th>Invoice</th>
+                    <th>Amount (MYR)</th>
+                    <th>Logs</th>
+                    {% if status == 'open' %}
+                        <th style="width: 1%;">Actions</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in page_obj %}
+                    <tr>
+                        <td class="text-right">
+                            <b class="d-inline d-md-none">ID</b>
+                            {{ row.pk }}
+                        </td>
+                        <td>
+                            <b class="d-block d-md-none">Invoice</b>
+                            <div>
+                                <a href="{% url 'admin-detail-claims' pk=row.pk %}">{{ row.invoice_id }}</a>
+                            </div>
+                            <div class="small">{% include 'widgets/date.html' with value=row.invoice_date format='date' %}</div>
+                            <div class="small">Category: {{ row.category.name }}</div>
+                        </td>
+                        <td class="text-right">
+                            <b class="d-inline d-md-none">Amount (MYR)</b>
+                            {% include 'widgets/numeric.html' with value=row.amount %}
+                        </td>
+                        <td>
+                            <b class="d-block d-md-none">Logs</b>
+                            {% include 'widgets/action-logs.html' with logs=row.logs.all %}
+                        </td>
+                        {% if status == 'open' %}
+                            <td>
+                                <b class="d-block d-md-none">Actions</b>
+                                <div class="d-flex align-items-start flex-wrap flex-md-nowrap"
+                                     style="gap: 0.25rem">
+                                    <a href="{% url 'admin-action-claims' pk=row.pk action='reject' %}"
+                                       class="btn btn-outline-danger"
+                                       data-toggle="tooltip"
+                                       data-title="Reject">
+                                        <i class="fa fa-fw fa-times"></i>
+                                        <span class="d-md-none">Reject</span>
+                                    </a>
+                                    <a href="{% url 'admin-action-claims' pk=row.pk action='approve' %}"
+                                       class="btn btn-outline-success"
+                                       data-toggle="tooltip"
+                                       data-title="Approve">
+                                        <i class="fa fa-fw fa-check"></i>
+                                        <span class="d-md-none">Approve</span>
+                                    </a>
+                                    {% if row.status == "IN_PROGRESS" %}
+                                        <a href="{% url 'admin-action-claims' pk=row.pk action='finalize' %}"
+                                           class="btn btn-outline-primary"
+                                           data-toggle="tooltip"
+                                           data-title="Finalize">
+                                            <i class="fa fa-fw fa-send-o"></i>
+                                            <span class="d-md-none">Finalize</span>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="{% if status == 'open' %}5{% else %}4{% endif %}">
+                            <div class="text-center py-3">
+                                <p>No claims.</p>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="pt-3">{% include 'widgets/pagination.html' %}</div>
+{% endblock %}

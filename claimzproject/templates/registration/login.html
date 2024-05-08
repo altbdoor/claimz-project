@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Login{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <div class="py-3">
+                <h1 class="mb-0">Login</h1>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    {% crispy form %}
+                    <p class="text-muted">
+                        Or are you looking for the <a href="{% url 'admin:index' %}">Django admin</a> interface?
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

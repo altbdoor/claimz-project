@@ -1,0 +1,55 @@
+{% extends "dashboard/base-dashboard.html" %}
+{% block title %}Claim {{ object.invoice_id }} (ID: {{ object.pk }}){% endblock %}
+{% block content %}
+    <h3 class="pb-3 mb-0">Claim {{ object.invoice_id }} (ID: {{ object.pk }})</h3>
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-hover mb-0" x-init>
+            <tbody>
+                <tr>
+                    <th class="text-right">ID</th>
+                    <td>{{ object.pk }}</td>
+                </tr>
+                <tr>
+                    <th class="text-right">Invoice ID</th>
+                    <td>{{ object.invoice_id }}</td>
+                </tr>
+                <tr>
+                    <th class="text-right">Invoice date</th>
+                    <td>{% include 'widgets/date.html' with value=object.invoice_date format='date' %}</td>
+                </tr>
+                <tr>
+                    <th class="text-right">Category</th>
+                    <td>{{ object.category.name }}</td>
+                </tr>
+                <tr>
+                    <th class="text-right">Amount (MYR)</th>
+                    <td>{% include 'widgets/numeric.html' with value=object.amount %}</td>
+                </tr>
+                <tr>
+                    <th class="text-right">Description</th>
+                    <td>{{ object.description }}</td>
+                </tr>
+                <tr>
+                    <th class="text-right">Invoice file</th>
+                    <td>
+                        <a href="{{ MEDIA_URL }}{{ object.invoice_file }}" target="_blank">{{ object.invoice_file }}</a>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="text-right">Status</th>
+                    <td>{{ object.get_status_display }}</td>
+                </tr>
+                <tr>
+                    <th class="text-right">Created</th>
+                    <td>{% include 'widgets/date.html' with value=object.created %}</td>
+                </tr>
+                <tr>
+                    <th class="text-right">Last modified</th>
+                    <td>{% include 'widgets/date.html' with value=object.modified %}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <h3 class="py-3 mb-0">Logs</h3>
+    {% include 'widgets/action-logs.html' with logs=object.logs.all show_remarks=True %}
+{% endblock %}

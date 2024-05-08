@@ -1,0 +1,9 @@
+{% if obj.status == "OPEN" %}
+    <span class="badge badge-secondary">{{ obj.get_status_display }}</span>
+{% elif obj.status == "IN_PROGRESS" %}
+    <span class="badge badge-warning">{{ obj.get_status_display }}</span>
+{% elif obj.status == "REJECTED" %}
+    <span class="badge badge-danger">{{ obj.get_status_display }}</span>
+{% elif obj.status == "APPROVED" %}
+    <span class="badge badge-success">{{ obj.get_status_display }}</span>
+{% endif %}

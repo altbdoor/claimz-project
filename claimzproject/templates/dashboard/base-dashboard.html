@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block navigation %}
+    <div class="pb-3">
+        <div class="navbar sticky-top navbar-expand-md navbar-light bg-light">
+            <a class="navbar-brand" href="{% url 'dashboard' %}">Claimz</a>
+            <button class="navbar-toggler"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#top-nav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="top-nav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'list-claims' %}">My claims</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'create-claims' %}">Create new claim</a>
+                    </li>
+                    {% if perms.claims.can_edit_claims_category %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'list-claims-category' %}">Categories</a>
+                        </li>
+                    {% endif %}
+                    {% if perms.claims.can_admin_claims %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Admin claims</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item"
+                                   href="{% url 'admin-list-claims' status='open' %}">Claims list</a>
+                                <a class="dropdown-item" href="{% url 'admin-report-claims' %}">Reports</a>
+                            </div>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

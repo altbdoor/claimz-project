@@ -1,0 +1,9 @@
+{% if obj.action == "CREATE" %}
+    <span class="badge badge-secondary">{{ obj.get_action_display }}</span>
+{% elif obj.action == "APPROVE" %}
+    <span class="badge badge-success">{{ obj.get_action_display }}</span>
+{% elif obj.action == "REJECT" %}
+    <span class="badge badge-danger">{{ obj.get_action_display }}</span>
+{% elif obj.action == "FINALIZE" %}
+    <span class="badge badge-primary">{{ obj.get_action_display }}</span>
+{% endif %}

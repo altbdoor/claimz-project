@@ -1,0 +1,11 @@
+{% if format == 'date' %}
+    <time datetime="{{ value | date:'c' }}"
+          x-text="new Date($el.getAttribute('datetime')).toLocaleDateString()">
+        {{ value | date:'c' }}
+    </time>
+{% else %}
+    <time datetime="{{ value | date:'c' }}"
+          x-text="new Date($el.getAttribute('datetime')).toLocaleString()">
+        {{ value | date:'c' }}
+    </time>
+{% endif %}
